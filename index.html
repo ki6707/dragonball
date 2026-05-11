@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Ball Anime</title>
+
+    <style>
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        #cont{
+            width: 420px;
+            min-height: 550px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 0px 25px rgba(0,0,0,0.5);
+            animation: fadeIn 1s ease;
+        }
+
+        h1{
+            color: white;
+            text-shadow: 0px 0px 10px cyan;
+            animation: glow 2s infinite alternate;
+        }
+
+        input{
+            width: 300px;
+            height: 45px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            text-align: center;
+            font-size: 20px;
+            font-family: cursive;
+            transition: 0.4s;
+        }
+
+        input:hover{
+            background-color: bisque;
+        }
+
+        input:focus{
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px aqua;
+        }
+
+        button{
+            width: 300px;
+            height: 45px;
+            border-radius: 10px;
+            border: 2px solid black;
+            font-size: 25px;
+            background: linear-gradient(45deg,aqua,cyan);
+            transition: 0.4s;
+        }
+
+        button:hover{
+            cursor: pointer;
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px cyan;
+        }
+
+        button:active{
+            transform: scale(0.95);
+            background: black;
+            color: white;
+        }
+
+        table{
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            color: white;
+            animation: slideUp 1s ease;
+        }
+
+        td{
+            border: 1px solid white;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        img{
+            width: 220px;
+            height: auto;
+            max-height: 320px;
+            margin-top: 20px;
+            border-radius: 20px;
+            object-fit: contain;
+            animation: animeOpen 1.5s ease;
+            box-shadow: 0px 0px 25px cyan;
+            transition: 0.5s;
+        }
+
+        img:hover{
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0px 0px 35px yellow;
+        }
+
+        @keyframes animeOpen{
+            0%{
+                opacity: 0;
+                transform: scale(0.3) rotate(-20deg);
+            }
+
+            50%{
+                opacity: 0.7;
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            100%{
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes glow{
+            from{
+                text-shadow: 0px 0px 10px cyan;
+            }
+
+            to{
+                text-shadow: 0px 0px 20px yellow;
+            }
+        }
+
+        @keyframes fadeIn{
+            from{
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to{
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes slideUp{
+            from{
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to{
+                opacity: 1;
+                transform: translateY(0px);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="cont">
+
+        <div>
+            <h1>Dragon Ball Anime Names</h1>
+        </div>
+
+        <div>
+            <input type="text" id="val1" placeholder="Enter character number...">
+        </div>
+
+        <br>
+
+        <div>
+            <button onclick="fun()">Search</button>
+        </div>
+
+        <div id="char"></div>
+
+        <div id="imp"></div>
+
+    </div>
+
+</body>
+
+<script>
+
+    function fun()
+    {
+        let a=document.getElementById("val1")
+        a=a.value
+
+        fetch(`https://dragonball-api.com/api/characters/${a}`)
+
+        .then(res=>res.json())
+
+        .then(data=>{
+
+            let tb=document.getElementById("char")
+            tb.innerHTML=""
+
+            let s=document.getElementById("imp")
+            s.innerHTML=""
+
+            let tab=document.createElement("table")
+
+            let name=data.name
+            let ki=data.ki
+            let maxki=data.maxKi
+            let race=data.race
+            let gender=data.gender
+
+            tab.innerHTML=
+            `
+            <tr>
+                <td>Name</td>
+                <td>${name}</td>
+            </tr>
+
+            <tr>
+                <td>Ki</td>
+                <td>${ki}</td>
+            </tr>
+
+            <tr>
+                <td>Max Ki</td>
+                <td>${maxki}</td>
+            </tr>
+
+            <tr>
+                <td>Race</td>
+                <td>${race}</td>
+            </tr>
+
+            <tr>
+                <td>Gender</td>
+                <td>${gender}</td>
+            </tr>
+            `
+
+            tb.appendChild(tab)
+
+            let im=document.createElement("img")
+
+            im.src=data.image
+
+            s.append(im)
+
+        })
+
+        .catch(()=>{
+            alert("Character not found")
+        })
+    }
+
+</script>
+
+</html>
